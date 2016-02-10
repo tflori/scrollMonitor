@@ -361,6 +361,9 @@
 		}
 	};
 	exports.beget = exports.create = function( element, offsets, $container ) {
+		if (!$container) {
+			$container = $(element).scrollParent();
+		}
 		var scrollMonitor = isWindowScrollMonitor($container) ? windowScrollMonitor : $container.data('scrollMonitor');
 		if ($container && !scrollMonitor) {
 			scrollMonitor = new ScrollMonitor($container);
