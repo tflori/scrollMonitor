@@ -8,7 +8,7 @@
 		window.scrollMonitor = factory( $ );
 	}
 })(function( $ ) {
-	
+
 	var exports = {};
 
 	var VISIBILITYCHANGE = 'visibilityChange';
@@ -73,13 +73,11 @@
 			this.viewportTop = this.$container.scrollTop();
 			this.viewportBottom = this.viewportTop + this.viewportHeight;
 			this.documentHeight = this.$document ? this.$document.height() : this.$container.prop("scrollHeight");
-			if (this.documentHeight !== this.previousDocumentHeight) {
-				calculateViewportI = this.watchers.length;
-				while( calculateViewportI-- ) {
-					this.watchers[calculateViewportI].recalculateLocation();
-				}
-				this.previousDocumentHeight = this.documentHeight;
+			calculateViewportI = this.watchers.length;
+			while( calculateViewportI-- ) {
+				this.watchers[calculateViewportI].recalculateLocation();
 			}
+			this.previousDocumentHeight = this.documentHeight;
 		},
 		recalculateWatchLocationsAndTrigger: function() {
 			this.viewportHeight = this.$container.height();
@@ -127,7 +125,7 @@
 
 		this.watchItem = watchItem;
 		this.scrollMonitor = scrollMonitor;
-		
+
 		if (!offsets) {
 			this.offsets = defaultOffsets;
 		} else if (offsets === +offsets) {
@@ -165,7 +163,7 @@
 			}
 		}
 		this.triggerCallbacks = function triggerCallbacks() {
-			
+
 			if (this.isInViewport && !wasInViewport) {
 				triggerCallbackArray( this.callbacks[ENTERVIEWPORT] );
 			}
@@ -173,12 +171,12 @@
 				triggerCallbackArray( this.callbacks[FULLYENTERVIEWPORT] );
 			}
 
-			
-			if (this.isAboveViewport !== wasAboveViewport && 
+
+			if (this.isAboveViewport !== wasAboveViewport &&
 				this.isBelowViewport !== wasBelowViewport) {
 
 				triggerCallbackArray( this.callbacks[VISIBILITYCHANGE] );
-				
+
 				// if you skip completely past this element
 				if (!wasFullyInViewport && !this.isFullyInViewport) {
 					triggerCallbackArray( this.callbacks[FULLYENTERVIEWPORT] );
@@ -225,7 +223,7 @@
 				if (cachedDisplay === 'none') {
 					this.watchItem.style.display = '';
 				}
-				
+
 				if (!this.$watchItem) {
 					this.$watchItem = $(this.watchItem);
 				}
@@ -371,7 +369,10 @@
 		}
 		return scrollMonitor.create(element, offsets);
 	};
-	exports.update = function( $container ) {
+	exports.update = function( $container, element ) {
+		if (!$container && element) {
+			$container = $(element).scrollParent();
+		}
 		this.getInstance($container).update();
 	};
 	exports.recalculateLocations = function( $container ) {
