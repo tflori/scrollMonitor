@@ -373,7 +373,12 @@
 		if (!$container && element) {
 			$container = $(element).scrollParent();
 		}
-		this.getInstance($container).update();
+		var scrollMonitor = this.getInstance($container);
+		if (!scrollMonitor) {
+			scrollMonitor = new ScrollMonitor($container);
+			$container.data('scrollMonitor', scrollMonitor);
+		}
+		scrollMonitor.update();
 	};
 	exports.recalculateLocations = function( $container ) {
 		this.getInstance($container).recalculateLocations();
